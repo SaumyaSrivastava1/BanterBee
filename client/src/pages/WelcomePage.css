@@ -1,0 +1,114 @@
+/* WelcomePage.css */
+.welcome-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); /* A soft, dreamy gradient */
+  padding: 2rem;
+  text-align: center;
+}
+
+.welcome-content {
+  background: rgba(255, 255, 255, 0.9); /* Semi-transparent white card */
+  padding: 3.5rem;
+  border-radius: 25px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+  max-width: 700px;
+  width: 100%;
+  backdrop-filter: blur(10px); /* Adds a frosted glass effect */
+}
+
+.welcome-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+  border-radius: 50%; /* Optional: makes the logo area circular */
+  /* box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2); Optional: adds a subtle glow */
+}
+
+.welcome-badge {
+  display: inline-block;
+  background: #eef2ff;
+  color: #6366f1;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.welcome-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.welcome-title .highlight {
+  color: #6366f1;
+  background: linear-gradient(120deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+  padding: 0 0.2em;
+  border-radius: 8px;
+}
+
+.welcome-subtitle {
+  font-size: 1.15rem;       /* Slightly larger for readability */
+  color: #475569;           /* A professional Slate-600 gray */
+  line-height: 1.7;         /* More breathing room between lines */
+  font-weight: 500;         /* Slightly bolder than normal */
+  margin-bottom: 24px;      /* Space below the text */
+  max-width: 480px;         /* Prevents the text from getting too wide */
+  margin-left: auto;        /* Centers the text block */
+  margin-right: auto;       /* Centers the text block */
+}
+
+/* Tech Stack Text (The smaller text below) */
+.tech-stack {
+  font-size: 0.9rem;
+  color: #94a3b8;           /* Lighter gray */
+  margin-bottom: 32px;
+  font-weight: 600;
+  text-transform: uppercase; /* Makes it look like a label */
+  letter-spacing: 0.5px;     /* Adds spacing between letters */
+}
+
+.welcome-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.btn-lg {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(to right, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #6366f1;
+  border: 2px solid #6366f1;
+}
+
+.btn-secondary:hover {
+  background: #eef2ff;
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+}
