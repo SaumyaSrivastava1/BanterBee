@@ -2,8 +2,12 @@
 import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
-const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || "http://localhost:5001";
-
+// const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || "http://localhost:5001";
+const SOCKET_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5001"
+    : "https://banterbee.onrender.com";
+    
 export default function useSocket(user) {
   const socketRef = useRef(null);
 
