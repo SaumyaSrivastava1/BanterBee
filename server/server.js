@@ -25,10 +25,23 @@ const allowedOrigins = [
 // --- 2. MIDDLEWARE ---
 app.use(express.json({ limit: "50mb" }));
 
+// app.use(cors({
+//   origin: allowedOrigins,
+//   credentials: true,
+// }));
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
 }));
+
+app.options("*", cors());
 
 // --- 3. SOCKET SETUP ---
 const server = http.createServer(app);
