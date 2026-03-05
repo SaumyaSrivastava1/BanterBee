@@ -20,7 +20,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone [https://github.com/YOUR_USERNAME/BanterBee.git](https://github.com/YOUR_USERNAME/BanterBee.git)
+   git clone [https://github.com/SaumyaSrivastava1/BanterBee.git](https://github.com/SaumyaSrivastava1/BanterBee.git)
    cd BanterBee
 
 2. **Backend Setup**

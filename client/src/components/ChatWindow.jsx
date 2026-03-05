@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion"; 
 import api from "../api/axiosConfig";
-import MessageInput from "./MessageInput";
+import ChatInput from "./ChatInput"; 
 import logo from "../assets/logo.png"; 
 
 const ChatWindow = ({ user, chatWith, socket }) => {
@@ -26,6 +26,34 @@ const ChatWindow = ({ user, chatWith, socket }) => {
     return String(val);
   }, []);
 
+  // --- TIME FORMATTER ---
+  const formatTime = (dateString) => {
+    if (!dateString) return "Just now";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Just now";
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  // --- DATE DIVIDER HELPER ---
+  const getDateLabel = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "";
+
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) return "Today";
+    if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
+    
+    return date.toLocaleDateString(undefined, { 
+      day: 'numeric', 
+      month: 'short', 
+      year: 'numeric' 
+    });
+  };
+
   const isNearBottom = useCallback(() => {
     const el = containerRef.current;
     if (!el) return true;
@@ -46,46 +74,33 @@ const ChatWindow = ({ user, chatWith, socket }) => {
     }
   }, []);
 
-  // --- FIXED RENDER AVATAR FUNCTION ---
-  // Handles Base64, URLs, and Fallbacks correctly
+  // --- RENDER AVATAR FUNCTION ---
   const renderAvatar = (avatar) => {
     if (!avatar) return <span className="chat-avatar-fallback">👤</span>;
 
-    // 1. If it's already a Data URI (New Avatars)
-    if (avatar.startsWith("data:image")) {
-      return (
-        <img 
-          src={avatar} 
-          alt="avatar" 
-          style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} 
-        />
-      );
+    if (avatar.startsWith("data:image") || avatar.startsWith("http")) {
+      return <img src={avatar} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} />;
     }
-    
-    // 2. If it's a web URL (http/https)
-    if (avatar.startsWith("http")) {
-      return (
-        <img 
-          src={avatar} 
-          alt="avatar" 
-          style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} 
-        />
-      );
-    }
-
-    // 3. If it's raw Base64 (Old Avatars), ADD the prefix
     if (avatar.length > 30) {
+      return <img src={`data:image/svg+xml;base64,${avatar}`} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} />;
+    }
+    return <span className="chat-avatar-emoji">{avatar}</span>;
+  };
+
+  // --- TICKS (WhatsApp Style) ---
+  const renderMessageStatus = (msg) => {
+    if (msg.read) {
       return (
-        <img 
-          src={`data:image/svg+xml;base64,${avatar}`} 
-          alt="avatar" 
-          style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} 
-        />
+        <span style={{ color: "#53bdeb", fontWeight: "bold", fontSize: "12px", letterSpacing: "-1px" }} title="Seen">
+          ✓✓
+        </span>
       );
     }
-    
-    // 4. Fallback for Emojis
-    return <span className="chat-avatar-emoji">{avatar}</span>;
+    return (
+      <span style={{ color: "#8696a0", fontWeight: "bold", fontSize: "12px", letterSpacing: "-1px" }} title="Delivered">
+        ✓✓
+      </span>
+    );
   };
 
   // 1. LOAD HISTORY
@@ -143,7 +158,7 @@ const ChatWindow = ({ user, chatWith, socket }) => {
     }
   }, [socket, user?._id, idStr]);
 
-  // 2. HANDLE REAL-TIME MESSAGES (Security Fix)
+  // 2. HANDLE REAL-TIME MESSAGES
   useEffect(() => {
     if (!socket || !user?._id) return;
     const myId = idStr(user._id);
@@ -153,7 +168,6 @@ const ChatWindow = ({ user, chatWith, socket }) => {
 
       const senderId = idStr(msg.sender);
       const receiverId = idStr(msg.receiver);
-      
       const currentPartnerId = idStr(activeChatRef.current?._id);
 
       const isIncomingFromPartner = (senderId === currentPartnerId && receiverId === myId);
@@ -163,7 +177,8 @@ const ChatWindow = ({ user, chatWith, socket }) => {
 
       const msgToStore = { 
         ...msg, 
-        read: isIncomingFromPartner ? true : msg.read 
+        read: isIncomingFromPartner ? true : msg.read,
+        createdAt: msg.createdAt || new Date().toISOString()
       };
 
       setMessages((prev) => {
@@ -196,7 +211,6 @@ const ChatWindow = ({ user, chatWith, socket }) => {
     const handleMessagesRead = (payload = {}) => {
       const reader = idStr(payload.reader);
       const other = idStr(payload.other);
-
       if (other !== myId) return;
 
       const currentPartnerId = idStr(activeChatRef.current?._id);
@@ -217,9 +231,7 @@ const ChatWindow = ({ user, chatWith, socket }) => {
 
   const handleClearChat = async () => {
     if (!chatWith) return;
-    const ok = window.confirm(
-      `Clear conversation with ${chatWith.username}? This will remove messages only from your view.`
-    );
+    const ok = window.confirm(`Clear conversation with ${chatWith.username}?`);
     if (!ok) return;
 
     try {
@@ -240,7 +252,6 @@ const ChatWindow = ({ user, chatWith, socket }) => {
     }
   };
 
-  // === EMPTY STATE (Welcome Dashboard) ===
   if (!chatWith) {
     return (
       <div className="chat-window-empty">
@@ -257,18 +268,10 @@ const ChatWindow = ({ user, chatWith, socket }) => {
             animate={{ y: [0, -15, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
+          <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
             Welcome, <span style={{ color: "#6366f1" }}>{user?.username}!</span> 👋
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
             Please select a chat to start messaging.
           </motion.p>
         </motion.div>
@@ -276,11 +279,10 @@ const ChatWindow = ({ user, chatWith, socket }) => {
     );
   }
 
-  // === ACTIVE CHAT UI ===
   return (
     <div className="chat-window" style={{ position: "relative", display: "flex", flexDirection: "column", height: '100%' }}>
       
-      {/* HEADER (Friend Info) */}
+      {/* HEADER */}
       <div className="chat-window-header" style={{ zIndex: 5 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div className="chat-avatar-wrap" style={{ overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -292,27 +294,62 @@ const ChatWindow = ({ user, chatWith, socket }) => {
       </div>
 
       <div className="chat-messages" ref={containerRef} style={{ paddingBottom: 20, overflowY: "auto", flex: 1 }}>
-        {messages.map((m) => {
+        {messages.map((m, index) => {
           const myId = idStr(user._id);
           const senderId = typeof m.sender === "string" ? m.sender : idStr(m.sender);
           const isMe = senderId === myId;
+          
+          const currentLabel = getDateLabel(m.createdAt);
+          const prevLabel = index > 0 ? getDateLabel(messages[index - 1].createdAt) : "";
+          const showDateDivider = currentLabel !== prevLabel;
 
           return (
-            <div key={m._id || `${senderId}-${m.text}-${m.createdAt || Math.random()}`} className={"chat-bubble " + (isMe ? "chat-bubble--me" : "chat-bubble--other")}>
-              <div className="chat-bubble-text">{m.text}</div>
-              {isMe && (
-                <div style={{ color: m.read ? "#16a34a" : "#64748b", marginTop: 6, fontSize: 12 }}>
-                  {m.read ? "Seen" : "Not seen yet"}
+            <React.Fragment key={m._id || `${senderId}-${m.text}-${index}`}>
+              
+              {/* DATE DIVIDER */}
+              {showDateDivider && (
+                <div style={{ 
+                  display: "flex", 
+                  justifyContent: "center", 
+                  margin: "20px 0 10px 0",
+                  opacity: 0.8 
+                }}>
+                  <span style={{ 
+                    backgroundColor: "#f1f5f9", 
+                    color: "#64748b", 
+                    fontSize: "11px", 
+                    padding: "4px 10px", 
+                    borderRadius: "10px",
+                    fontWeight: "600",
+                    border: "1px solid #e2e8f0"
+                  }}>
+                    {currentLabel}
+                  </span>
                 </div>
               )}
-            </div>
+
+              {/* MESSAGE BUBBLE - CLEANED UP (No Sticker Logic) */}
+              <div className={"chat-bubble " + (isMe ? "chat-bubble--me" : "chat-bubble--other")}>
+                
+                {/* JUST THE TEXT */}
+                <div className="chat-bubble-text">{m.text}</div>
+                
+                {/* --- TIME & TICKS --- */}
+                <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "4px", marginTop: "4px" }}>
+                  <span style={{ fontSize: "10px", opacity: 0.7, color: isMe ? "#e0e0e0" : "#64748b" }}>
+                    {formatTime(m.createdAt)}
+                  </span>
+                  {isMe && renderMessageStatus(m)}
+                </div>
+              </div>
+            </React.Fragment>
           );
         })}
         <div ref={bottomRef} />
       </div>
 
       <div className="message-input" style={{ position: "sticky", bottom: 0, zIndex: 6 }}>
-        <MessageInput onSend={handleSend} disabled={!chatWith} />
+        <ChatInput handleSendMsg={handleSend} />
       </div>
     </div>
   );

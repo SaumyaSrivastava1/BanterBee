@@ -1,4 +1,4 @@
-/* ===== App.css (full updated version) ===== */
+/* ===== App.css  ===== */
 
 /* ===== Base ===== */
 html, body, #root {
@@ -17,10 +17,10 @@ html, body, #root {
 /* ===== Layout ===== */
 .chat-layout {
   display: flex;
-  height: calc(100vh - 48px);   /* FIX: keep equal top/bottom spacing */
+  height: calc(100vh - 48px);   
   max-width: 1200px;
   width: 100%;
-  margin: 24px auto;            /* equal margin on all sides */
+  margin: 24px auto;            
   border-radius: 24px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.9);
@@ -36,8 +36,8 @@ html, body, #root {
   padding: 16px 14px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;       /* Sidebar scroll only */
-  min-height: 0;          /* critical for nested flex scrolling */
+  overflow-y: auto;       
+  min-height: 0;          
 }
 
 .chat-sidebar-title {
@@ -153,7 +153,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, #eef7ff, #fdf4ff);
-  min-height: 0; /* allow children to shrink so internal scroll works */
+  min-height: 0; 
 }
 
 /* Top bar */
@@ -163,7 +163,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px; /* match inner spacing */
+  padding: 0 24px; 
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(18px);
   flex-shrink: 0;
@@ -212,15 +212,12 @@ html, body, #root {
   background: #fca5a5;
 }
 
-/* ===== Chat window =====
-   Use equal inner spacing on all sides (24px).
-   The message area will stop above the docked input.
-*/
+/* ===== Chat window ===== */
 .chat-window {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 24px;   /* equal spacing top/right/bottom/left */
+  padding: 24px;   
   min-height: 0;
 }
 
@@ -243,10 +240,7 @@ html, body, #root {
   color: #0f172a;
 }
 
-/* Messages area — SCROLLABLE ONLY HERE
-   Bottom padding keeps messages above the docked input:
-   calc(24px + 72px) ≈ 24px (card bottom padding) + ~72px input area
-*/
+/* Messages area */
 .chat-messages {
   flex: 1;
   display: flex;
@@ -290,39 +284,40 @@ html, body, #root {
   justify-content: center;
   font-size: 18px;
   color: #64748b;
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); 
+  border-radius: 0 24px 24px 0; 
+  overflow: hidden;
 }
 
-/* ===== Message input (DOCKED, FULL-WIDTH INSIDE CARD) =====
-   Input bar will stretch from left inner edge to right inner edge.
-   The card itself has 24px of outer padding, so visually left/right space
-   matches the top spacing.
-*/
+/* ===== Message input ===== */
 .message-input {
   border-top: 1px solid rgba(226, 232, 240, 0.9);
-
-  /* edge-to-edge inside the card: padding is internal only */
-  padding: 12px 0;  /* vertical padding; horizontal spacing handled by container */
+  padding: 12px 0;  
   margin: 0;
   display: flex;
   gap: 12px;
   align-items: center;
   background: rgba(255, 255, 255, 0.96);
-
   flex-shrink: 0;
   border-radius: 8px;
-  width: 100%; /* full width inside .chat-window */
+  width: 100%; 
   box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
 }
 
-/* We wrap the input/button in an inner container so they don't touch the absolute edges
-   while the bar remains full-width visually. This keeps the left/right inner spacing equal to 24px.
-*/
+.message-input form {
+  display: flex;
+  flex: 1;  
+  width: 100%;
+  gap: 10px;
+  align-items: center;
+}
+
 .message-input .inner {
   display: flex;
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 0 12px;     /* small breathing room inside the full-width bar */
+  padding: 0 12px;     
 }
 
 /* Input itself */
@@ -335,6 +330,7 @@ html, body, #root {
   font-size: 15px;
   outline: none;
   background: #ffffffdd;
+  width: 100%;
 }
 
 .message-input input:focus {
@@ -373,14 +369,12 @@ html, body, #root {
 }
 
 /* ===== Welcome / Auth layouts ===== */
-/* (keeping your original design EXACTLY as-is) */
 .welcome-bg {
   min-height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* We increase the background size so we can animate its position */
   background: linear-gradient(-45deg, #fee2ff, #e0f2fe, #c7d2fe, #f0abfc);
   background-size: 400% 400%;
   padding: 24px;
@@ -389,13 +383,12 @@ html, body, #root {
 .welcome-card {
   max-width: 520px;
   width: 100%;
-  /* Make background slightly more transparent for a modern glass look */
   background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px); /* Stronger blur */
+  backdrop-filter: blur(12px); 
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 24px;
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.14);
-  padding: 36px 32px; /* Slightly more padding */
+  padding: 36px 32px; 
   text-align: left;
   position: relative;
   overflow: hidden;
@@ -557,32 +550,21 @@ html, body, #root {
 }
 
 .chat-sidebar-logo {
-  width: 55px;         /* Increased size (was 40px) */
-  height: 55px;        /* Increased size (was 40px) */
-  object-fit: cover;   /* Ensures the bee fills the area */
-  border-radius: 50%;  /* Makes it a perfect circle */
-  background: white;   /* Adds a clean white background behind the bee */
-  border: 2px solid #e2e8f0; /* Optional: Adds a nice thin border */
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Optional: Adds a subtle pop */
+  width: 55px;         
+  height: 55px;        
+  object-fit: cover;   
+  border-radius: 50%;  
+  background: white;   
+  border: 2px solid #e2e8f0; 
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
 }
 
-/* Ensure title font looks nice next to logo */
 .chat-sidebar-title {
   font-size: 1.5rem;
   font-weight: 800;
   color: #334155;
   margin: 0;
   letter-spacing: -0.5px;
-}
-/* ===== Empty State Dashboard ===== */
-.chat-window-empty {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* Subtle premium gradient */
-  border-radius: 0 24px 24px 0; /* Match layout radius */
-  overflow: hidden;
 }
 
 .empty-state-content {
@@ -595,11 +577,11 @@ html, body, #root {
 }
 
 .empty-state-logo {
-  width: 120px;  /* Big, prominent logo */
+  width: 120px;  
   height: 120px;
   object-fit: contain;
   margin-bottom: 20px;
-  filter: drop-shadow(0 10px 15px rgba(99, 102, 241, 0.3)); /* Nice shadow glow */
+  filter: drop-shadow(0 10px 15px rgba(99, 102, 241, 0.3)); 
 }
 
 .chat-window-empty h2 {
@@ -619,25 +601,116 @@ html, body, #root {
 .chat-window-header .chat-avatar-wrap {
   width: 40px;
   height: 40px;
-  background: transparent; /* Removes gray box behind transparent logos */
-  border: 2px solid #fff;  /* Adds a crisp white border */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Adds a subtle pop */
+  background: transparent; 
+  border: 2px solid #fff;  
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
 }
 
-/* Ensure the image fits perfectly */
 .chat-window-header .chat-avatar-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* ===== Auth Page Logo Styling ===== */
 .auth-logo {
-  width: 60px;          /* Nice and big */
+  width: 60px;          
   height: 60px;
   object-fit: cover;
-  border-radius: 50%;   /* Perfect circle */
-  background: white;    /* Clean background */
+  border-radius: 50%;   
+  background: white;    
   border: 2px solid #e2e8f0;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.15); /* Soft purple glow */
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.15); 
+}
+
+/* ============================================================
+   EMOJI PICKER FIX - UNIVERSAL (V3 & V4 Support)
+   ============================================================ */
+
+/* 1. Main Container - UPDATED FOR POP-UP STYLE */
+aside.emoji-picker-react,
+.emoji-picker-react,
+.epr-main {
+  background-color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+  border-radius: 12px !important;
+  border: 1px solid #e9edef !important;
+  
+  /* --- CHANGED LINES BELOW --- */
+  width: 320px !important;          /* Fixed width instead of 100% */
+  height: 320px !important;         /* Fixed height */
+  
+  position: absolute !important;    /* Floats it above the content */
+  bottom: 20px !important;          /* Pushes it up above the input bar */
+  left: 5px !important;            /* Anchors it to the left side */
+  z-index: 100 !important;          /* Ensures it sits on top of messages */
+  
+  --epr-bg-color: #ffffff !important;
+}
+
+/* 2. FORCE HIDE SKIN TONES (The Square) */
+/* We target every possible variation of the skin tone button */
+.emoji-picker-react .skin-tones,
+.emoji-picker-react .skin-tones-list,
+.emoji-picker-react label[aria-label="Skin Tones"],
+aside.emoji-picker-react .epr-header .epr-skin-tones {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 3. SEARCH CONTAINER */
+.emoji-picker-react .search-container,
+.emoji-picker-react .epr-search-container {
+  display: flex !important;
+  align-items: center !important;
+  padding: 10px !important;
+  position: relative !important;
+  margin: 0 !important;
+}
+
+/* 4. HIDE OLD ICONS / ELEMENTS */
+/* Hides any default icons so we can inject our own */
+.emoji-picker-react .search-container > *:not(input),
+.emoji-picker-react .epr-search-container > *:not(input) {
+  display: none !important;
+}
+
+/* 5. SEARCH INPUT (With Injected Icon) */
+.emoji-picker-react input.emoji-search,
+.emoji-picker-react input.epr-search {
+  display: block !important;
+  background-color: #f0f2f5 !important;
+  border: none !important;
+  border-radius: 999px !important; /* Pill shape */
+  height: 40px !important;
+  width: 100% !important;
+  
+  /* Text Styling */
+  color: #000000 !important;
+  font-size: 15px !important;
+  margin: 0 !important;
+  
+  /* PADDING: 40px on Left creates space for the icon */
+  padding: 0 15px 0 40px !important; 
+
+  /* INJECT ICON via Background Image */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='%2354656f'%3E%3Cpath d='M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: 12px center !important;
+  background-size: 18px !important;
+}
+
+/* 6. Placeholder Text */
+.emoji-picker-react input.emoji-search::placeholder,
+.emoji-picker-react input.epr-search::placeholder {
+  color: #54656f !important;
+  opacity: 1 !important;
+}
+
+/* 7. Focus State */
+.emoji-picker-react input:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(0, 168, 132, 0.15) !important;
 }

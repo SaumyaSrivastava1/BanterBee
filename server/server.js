@@ -8,6 +8,7 @@ require("dotenv").config();
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const messageRoutes = require("./routes/messageRoutes");
+const requestRoutes = require("./routes/requestRoutes"); // <--- ADDED: Request Routes
 
 const app = express();
 
@@ -68,6 +69,7 @@ io.on("connection", (socket) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/requests", requestRoutes); // <--- ADDED: Register the route here
 
 // DATABASE & SERVER START
 // Render sets PORT automatically, so we must use process.env.PORT
