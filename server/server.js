@@ -12,25 +12,17 @@ const requestRoutes = require("./routes/requestRoutes"); // <--- ADDED: Request 
 
 //const app = express();
 
+// new
 const app = express();
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
+aapp.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://banter-bee.vercel.app"
+  ],
+  methods: ["GET","POST","PUT","DELETE"],
+  allowedHeaders: ["Content-Type","Authorization"],
+}));
 
 app.use(express.json({ limit: "50mb" }));
 
