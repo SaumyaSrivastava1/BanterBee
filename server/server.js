@@ -29,7 +29,9 @@ const allowedOrigins = [
 //   origin: allowedOrigins,
 //   credentials: true,
 // }));
-a// --- 2. MIDDLEWARE ---
+
+// --- 2. MIDDLEWARE ---
+
 app.use(express.json({ limit: "50mb" }));
 
 app.use(cors({
