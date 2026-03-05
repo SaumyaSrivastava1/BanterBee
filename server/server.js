@@ -34,7 +34,10 @@ const allowedOrigins = [
 app.use(express.json({ limit: "50mb" }));
 
 app.use(cors({
-  origin: true,
+  origin: [
+    "http://localhost:3000",
+    "https://banter-bee.vercel.app"
+  ],
   credentials: true
 }));
 
