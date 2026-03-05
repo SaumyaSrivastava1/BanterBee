@@ -16,9 +16,10 @@ const app = express();
 // This allows both Localhost (for dev) AND Vercel (for production)
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://localhost:3001", 
+  "http://localhost:3001",
   "http://localhost:3002",
-  "https://banterbee.vercel.app" 
+  "https://banter-bee.vercel.app",
+  "https://banterbee.vercel.app"
 ];
 
 // --- 2. MIDDLEWARE ---
