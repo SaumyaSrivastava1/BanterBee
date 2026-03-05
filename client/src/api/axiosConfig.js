@@ -46,9 +46,9 @@ import axios from "axios";
 const isDevelopment = window.location.hostname === "localhost";
 
 const api = axios.create({
-  baseURL: isDevelopment
-    ? "http://localhost:5001"
-    : "https://banterbee-api.onrender.com",
+  baseURL: isDevelopment 
+  ? "http://localhost:5001" 
+  : "https://banterbee.onrender.com",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
