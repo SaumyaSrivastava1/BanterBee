@@ -31,24 +31,29 @@ const allowedOrigins = [
 // }));
 
 // --- 2. MIDDLEWARE ---
-app.use(express.json({ limit: "50mb" }));
-
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://banter-bee.vercel.app"
-  ],
-  credentials: true
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+app.use(express.json({ limit: "50mb" }));
 
 // --- 3. SOCKET SETUP ---
 const server = http.createServer(app);
 
+// const io = new Server(server, {
+//   cors: {
+//     origin: allowedOrigins, // Use the same array here
+//     methods: ["GET", "POST"],
+//     credentials: true
+//   },
+// });
+
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins, // Use the same array here
-    methods: ["GET", "POST"],
-    credentials: true
+    origin: "*",
+    methods: ["GET", "POST"]
   },
 });
 
