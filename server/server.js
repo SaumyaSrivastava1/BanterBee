@@ -10,7 +10,29 @@ const userRoutes = require("./routes/userRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const requestRoutes = require("./routes/requestRoutes"); // <--- ADDED: Request Routes
 
+//const app = express();
+
 const app = express();
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+app.use(express.json({ limit: "50mb" }));
 
 // --- 1. DEFINE ALLOWED ORIGINS ---
 // This allows both Localhost (for dev) AND Vercel (for production)
@@ -31,13 +53,13 @@ const allowedOrigins = [
 // }));
 
 // --- 2. MIDDLEWARE ---
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+// app.use(cors({
+//   origin: "*",
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization"]
+// }));
 
-app.use(express.json({ limit: "50mb" }));
+// app.use(express.json({ limit: "50mb" }));
 
 // --- 3. SOCKET SETUP ---
 const server = http.createServer(app);
