@@ -31,14 +31,11 @@ const allowedOrigins = [
 // }));
 
 // --- 2. MIDDLEWARE ---
-
-// --- 2. MIDDLEWARE ---
 app.use(express.json({ limit: "50mb" }));
 
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  origin: true,
+  credentials: true
 }));
 
 // --- 3. SOCKET SETUP ---
