@@ -49,7 +49,6 @@ const api = axios.create({
   baseURL: isDevelopment 
   ? "http://localhost:5001" 
   : "https://banterbee.onrender.com",
-  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
