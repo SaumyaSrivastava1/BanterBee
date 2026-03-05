@@ -15,7 +15,7 @@ const requestRoutes = require("./routes/requestRoutes"); // <--- ADDED: Request 
 // new
 const app = express();
 
-aapp.use(cors({
+app.use(cors({
   origin: [
     "http://localhost:3000",
     "https://banter-bee.vercel.app"
@@ -23,7 +23,7 @@ aapp.use(cors({
   methods: ["GET","POST","PUT","DELETE"],
   allowedHeaders: ["Content-Type","Authorization"],
 }));
-
+app.options("*", cors());
 app.use(express.json({ limit: "50mb" }));
 
 // --- 1. DEFINE ALLOWED ORIGINS ---
